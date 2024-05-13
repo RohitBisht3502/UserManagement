@@ -1,4 +1,4 @@
-# <h1 align = "center">  Application API </h1>
+# <h1 align = "center">  User Management API </h1>
 ___ 
 <p align="center">
 <a href="Java url">
@@ -21,232 +21,141 @@ ___
 
 ## Overview
 
-The Blogging Management Application is a Spring Boot-based web application designed to help manage user,comment,post information. It allows users to perform various operations related to blogging management, including adding new comments and post, updating comments and post, and deleting comments and post from the system. When user sign in the system a token value for authentication is send to there registered email for confirmation of the user. And that token value is important while performing any task in system.
-
+The User Management API is a Spring Boot-based web application designed to facilitate the management of users. It provides endpoints for performing operations related to user management, such as creating new users, updating user information, and deleting user accounts and many more.
 ## Technologies Used
 
 - **Framework:** Spring Boot
 - **Language:** Java
 - **Build Tool:** Maven
-- **Cloud Services:** Amazon Web Services (AWS)
 - **Database:** MySql
-## Data Flow
-
-### Controller
+  
+## Controller
 
 The Controller layer is responsible for handling incoming HTTP requests and delegating them to the appropriate services. It defines API endpoints for the following operations:
 
-1. **Post User or User Sign Up:** `POST /users`
-   
-   This endpoint creates a user it is like as sign up in the system.
+## User Management API Endpoints
 
-   ```java
-   @PostMapping("users")
-   public String userSignUp(@RequestBody User newUser) {
-       
-   }
-   ```
+### Create User
+- **Method**: POST
+- **Endpoint**: /user/create
+- **Description**: Creates a new user with the provided attributes.
+- **Request Body**: User object containing user details.
+- **Response**: Success message upon successful user creation.
 
-2. **User Sign In:** `Sign In /users`
-   
-   This endpoint received user email and password for sign in the system .
+### Create Manager
+- **Method**: POST
+- **Endpoint**: /manager/create
+- **Description**: Creates a new manager with the provided attributes.
+- **Request Body**: Manager object containing manager details.
+- **Response**: Success message upon successful manager creation.
 
-   ```java
-   @PostMapping("users")
-   public String userSignIn(@RequestBody User newUser) {
-       
-   }
-   ```
+### Get All Managers
+- **Method**: GET
+- **Endpoint**: /managers/all
+- **Description**: Retrieves all managers from the database.
+- **Response**: List of Manager objects.
 
-3. **Add Post:** `POST /blog post`
-   This endpoint adds a new post to the system and also recieved user email and token value for verify authentication.
+### Get All Users
+- **Method**: GET
+- **Endpoint**: /users/all
+- **Description**: Retrieves all users from the database.
+- **Response**: List of User objects.
 
-   ```java
-   @PostMapping("BlogPost")
-   public String createPost(@RequestParam String email,@RequestParam String tokenValue, @RequestBody Post instaPost){
-     
-    }
-   ```
+### Get Users by Manager ID
+- **Method**: GET
+- **Endpoint**: /users/by-manager/{managerId}
+- **Description**: Retrieves all users belonging to the specified manager.
+- **Request Parameter**: managerId (Long)
+- **Response**: List of User objects filtered by manager ID.
 
-4. **Get Post:** `GET /Post Content`
+### Get User by Contact Number
+- **Method**: GET
+- **Endpoint**: /users/by-phone/{phoneNumber}
+- **Description**: Retrieves the user with the specified contact number.
+- **Request Parameter**: phoneNumber (String)
+- **Response**: User object.
 
-   This endpoint get all the post by its ID.
+### Bulk Update Users
+- **Method**: PUT
+- **Endpoint**: /users/update/bulk
+- **Description**: Updates multiple users with the provided data.
+- **Request Body**: UpdateRequest object containing user IDs and update data.
+- **Response**: Success message upon successful user updates.
 
-   ```java
-   @GetMapping("BlogPost/{postId}")
-   public String getPostContentByPostId(@RequestParam String email, @RequestParam String tokenValue, @PathVariable Long postId){
-    }
-   ```
+### Delete User by ID
+- **Method**: DELETE
+- **Endpoint**: /user/delete/{userId}
+- **Description**: Deletes the user with the specified user ID.
+- **Request Parameter**: userId (UUID)
+- **Response**: Success message upon successful user deletion.
 
-5. **Update Post Location:** `PUT /post/id/{id}/location/{location}`
-
-   This endpoint updates the location of a post by its ID and needs a authentication for apply the changes in any task.
-
-   ```java
-   @PutMapping("BlogPost/Location/{location}/{postId}")
-   public String updatePostLocationByPostId(@RequestParam String email, @RequestParam String tokenValue, @PathVariable Long 
-   postId,@PathVariable String location){
-
-    }
-
-   ```
-
-6. **Delete Post:** `DELETE /Post/{id}`
-
-   This endpoint deletes a post by its ID.
-
-   ```java
-   @DeleteMapping("post/{id}")
-   public String deletePost(@PathVariable Integer id) {
-       
-   }
-   ```
-7. **Add Comment:** `POST /Comment`
-   This endpoint adds a new post to the system and also recieved user email and token value for verify authentication.
-
-   ```java
-   @PostMapping("comment/post/{postId}")
-   public String addComment(@RequestParam String email, @RequestParam String tokenValue, @PathVariable Long postId,@RequestBody String 
-   commentBody ){
-       
-    }
-   ```
-
-8. **Get Comment:** `GET /Comment`
-
-   This endpoint get all the comments by its post ID.
-
-   ```java
-   @GetMapping("comment/{postId}")
-    public List<String> getCommentByPostId(@RequestParam String email, @RequestParam String tokenValue, @PathVariable Long postId){
-      
-    }
-   ```
-
-9. **Update Comment Body:** `PUT /post/id/{id}/{newComment}`
-
-   This endpoint updates the comment body of a post by its ID and needs a authentication for apply the changes in any task.
-
-   ```java
-   @PutMapping("Edit/Comment/{commentId}/{newComment}")
-   public String editCommentByCommentId(@RequestParam String email, @RequestParam String tokenValue, @PathVariable Long 
-   commentId,@PathVariable String newComment){
-        return userService.editCommentByCommentId(email,tokenValue,commentId,newComment);
-    }
-
-   ```
-
-10. **Delete Comment:** `DELETE /comment/{id}`
-
-    This endpoint deletes a comment from post by its ID.
-
-    ```java
-    @DeleteMapping("comment/{id}")
-    public String deleteComment(@PathVariable Integer id) {
-       
-    }
-     ```
-### Services
+### Delete User by Contact Number
+- **Method**: DELETE
+- **Endpoint**: /user/delete/by-phone/{phoneNumber}
+- **Description**: Deletes the user with the specified contact number.
+- **Request Parameter**: phoneNumber (String)
+- **Response**: Success message upon successful user deletion.
+  
+## Services
 
 The Services layer implements the core business logic, data processing, and interaction with the data repository. Key responsibilities include:
 
 - Validating input data.
-- Performing CRUD operations on restaurant data.
+- Performing CRUD operations on user data.
 - Handling data transformations and interactions with external systems (if applicable).
 
-### Repository
+## Repository
 
-The Repository layer manages data access to the underlying database. It handles database operations such as Create, Read, Update, and Delete (CRUD) for restaurant data. Additionally, it may include data mapping and conversion between Java objects and database entities.
+The Repository layer manages data access to the underlying database. It handles database operations such as Create, Read, Update, and Delete (CRUD) for user data. Additionally, it may include data mapping and conversion between Java objects and database entities.
 
-## Data Structures Used
-
-1.ArrayList
-
-The project utilizes the following data structures:
-
-### User Class
+## User Class
 
 The `User` class defines the structure for user data and includes the following fields:
 
-- userId (Type: Long): An identifier for the user.
-- userName (Type: String): The user's full name.
-- userHandle (Type: String): A unique handle or username associated with the user, often used for identification or public display.
-- userEmail (Type: String): The email address associated with the user's account.
-- userPassword (Type: String): The password used for user authentication and access control.
-- userGender (Type: Gender): A variable representing the user's gender, which may be defined as an enumeration or a custom data type.
+- `userId` (Type: UUID): An identifier for the user.
+- `userName` (Type: String): The user's full name.
+- `contactNumber` (Type: String): The user's contact number.
+- `userPanNumber` (Type: String): The user's PAN number (Permanent Account Number). Must be a valid PAN number (e.g., AABCP1234C).
+- `createdAt` (Type: LocalDateTime): The timestamp indicating when the user was created. This field is not updatable.
+- `updatedAt` (Type: LocalDateTime): The timestamp indicating when the user was last updated.
+- `manager` (Type: Manager): The manager associated with the user.
+## Manager Class
 
-### Post Class
+The `Manager` class defines the structure for manager data and includes the following fields:
 
-The `Post` class defines the structure for post data and includes the following fields:
+- `managerId` (Type: Long): An identifier for the manager.
+- `managerName` (Type: String): The manager's full name.
+- `managerContactNumber` (Type: String): The manager's contact number
+- `managerEmail` (Type: String): The email address associated with the manager's account.
 
-- postId (Type: Integer): An identifier for the post.
-- postContent (Type: String): The content or text of the post.
-- postCaption (Type: String): A caption associated with the post.
-- postLocation (Type: String): The location where the post was created or is associated with.
-- postType (Type: PostType): A variable of type PostType that likely represents the type or category of the post.
-- postCreatedTimeStamp (Type: LocalDateTime): A timestamp indicating when the post was created or published.
-- postOwner (Type: User): An association with a "User" object, presumably representing the owner or author of the post.
-  
-### Comment Class
-
-The `Comment` class defines the structure for comment data and includes the following fields:
-
-- commentId (Type: Integer): An identifier for the comment.
-- commentBody (Type: String): The main content or text of the comment, which is marked as non-nullable.
-- commentCreationTimeStamp (Type: LocalDateTime): A timestamp indicating when the comment was created.
-
-### Type Enum
-
-The `Gender Type` enum enumerates the possible restaurant types:
-
-- `MALE`: 
-- `FEMALE`: 
-- `TRANS`: 
 - ...
+## Mapping
 
-The `Post Type` enum enumerates the possible restaurant types:
-
-- `IMAGE`: 
-- `VIDEO`: 
-- `TEXT`: 
-- ...
-### Mapping
-
-The `Comment class` mappings are likes Many post have one comment and Many user can comment in post:
+The `User class` mappings are likes Many users have one manager:
 
 - @ManyToOne
-    @JoinColumn(name = "fk_post_id")
-    private Post post;
+- @JoinColumn(name = "fk_manager_id")
+- private Manager manager;
 
-- @ManyToOne
-    @JoinColumn(name = "fk_commenter_id")
-    private User commenter;
 
-The `Post class` mappings are likes:
 
-- @ManyToOne
-    @JoinColumn(name = "fk_owner_user_id")
-    private User postOwner;
+## MySql
 
-### MySql
-
-The project utilizes the `MYSql` database to store and manage lists of `users` ,`post`,`comment` objects in various parts of the application. `MySql` provides permanent storage and efficient element retrieval, making it suitable for storing blog records and performing operations on them.
+The project utilizes the `MYSql` database to store and manage lists of `users` ,`manager` objects in various parts of the application. `MySql` provides permanent storage and efficient element retrieval, making it suitable for storing blog records and performing operations on them.
 
 These database enable the application to organize and manipulate blog data efficiently while maintaining data integrity.
 
 ## Project Summary
 
-A Blogging API System in Spring Boot is a web application that allows users to create, read, update, and delete blog posts through a set of RESTful APIs. Spring Boot, a popular Java framework, is used to streamline the development of such systems. Here's a summary of the key features and components typically found in a Blogging API System built with Spring Boot:
+The User Management API provides a comprehensive solution for managing user data through a user-friendly interface and a robust backend infrastructure. Built on Spring Boot, the system offers scalability, reliability making it suitable for a wide range of user management applications.
 
 Key Features:
 
-- RESTful API endpoints for blog management.
+- RESTful API endpoints for user management.
 - Data validation to ensure data integrity.
 - Clean code separation with a layered architecture (Controller, Services, Repository).
 - Robust error handling for improved reliability.
 - Java-based backend and Maven for build management.
-
-The Blogging Management Application serves as a practical example of Spring Boot application development, demonstrating best practices in API design and user data management. It offers a solid foundation for building and extending blogging management systems in various applications.
 
 ## License
 
